@@ -1,16 +1,27 @@
-#!/usr/bin/bash
+#!/bin/bash
 
-cmd=/usr/bin/systemd-analyze
-#kern=`${cmd} | grep ^Start | awk -F' ' '{ print $10 }'`
-# echo 
-# kerntime=`${kern} | grep -Eo '[0-9]+\.[0-9]+'`
-# echo ${kerntime}
+# Run systemd-analyze to get the boot times
+output=$(systemd-analyze)
 
-## Working on my system
-## TODO
-kernel=`${cmd} | grep ^Start | awk -F'+' '{a=$3; print a}' | awk -F' ' '{if($2=="(kernel)")print $1}' | grep -Eo '[0-9]+\.[0-9]+'`
-uspace=`${cmd} | grep ^Start | awk -F'+' '{a=$4; print a}' | awk -F' ' '{if($2=="(userspace)")print $1}' | grep -Eo '[0-9]+\.[0-9]+'`
+# Extract kernel boot time in seconds (could be in minutes or seconds)
+kernel_time=$(echo "$output" | grep -oP '\d+\.\d+s \(kernel\)' | sed 's/[^0-9.]//g')
 
-# Debug
-echo ${kernel}
-echo ${uspace}
+# Extract userspace boot time in seconds (could be in minutes or seconds)
+userspace_time=$(echo "$output" | grep -oP '\d+(\.\d+)?(min)?s \(userspace\)' | sed 's/[^0-9.]//g')
+
+# Convert userspace time from minutes to seconds if necessary
+if [[ "$userspace_time" =~ "min" ]]; then
+  userspace_time=$(echo "$userspace_time" | sed 's/min//g')
+  userspace_time=$(echo "$userspace_time * 60" | bc)
+fi
+
+# Get current time in 12-hour format (AM/PM) with just the hour
+current_time=$(date +'%I:%M:%S %p')
+
+# Output the formatted result
+echo "$current_time,$kernel_time,$userspace_time"
+
+sleep 5
+
+# Reboot the system
+`/usr/sbin/reboot`
