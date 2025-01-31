@@ -1,0 +1,65 @@
+#!/bin/bash
+
+set -e 
+
+# Define file names
+SYS_FILE="./system_analyze.csv"
+
+wait_for_boot() {
+    # Wait until the system is fully running
+    systemd-analyze > /dev/null
+    while [ $? -ne 0 ]; do
+        sleep 60
+        systemd-analyze > /dev/null
+    done
+
+    echo -e "+----------------------------+"
+    echo -e "|  SYSTEM IS UP & RUNNING    |"
+    echo -e "+----------------------------+"
+}
+
+system_analyze() {
+    if [ -f "$SYS_FILE" ]; then
+        # Collect system data and current date
+        SYSTEM_DATA=$(systemd-analyze | grep -oE '[0-9]+\.[0-9]+')
+        CURRENT_DATE=$(date)
+
+        # Append data in CSV format
+        printf "%s,%s,%s,%s,%s\n" $SYSTEM_DATA "$CURRENT_DATE" >> "$SYS_FILE"
+    else
+        # Create header for CSV file
+        printf "Kernel,Userspace,Total,Graphics,Date\n" > "$SYS_FILE"
+        
+        # Collect system data and current date
+        SYSTEM_DATA=$(systemd-analyze | grep -oE '[0-9]+\.[0-9]+')
+        CURRENT_DATE=$(date)
+
+        # Append data in CSV format
+        printf "%s,%s,%s,%s,%s\n" $SYSTEM_DATA "$CURRENT_DATE" >> "$SYS_FILE"
+    fi
+}
+
+reboot_seq() {
+    num=$(wc -l < "$SYS_FILE")  # Get line count directly without filename
+
+#    ((num++))
+
+    if [ $num -ge 110 ]; then
+        echo "Boot count reached 110, not rebooting."
+        return  # Exit the function without rebooting
+    else
+        echo "Rebooting..."
+        sleep 10
+	sudo reboot
+    fi
+}
+
+# Main function to call other functions
+main() {
+    wait_for_boot
+    system_analyze  # Call system analyze function
+    reboot_seq      # Call reboot sequence function
+}
+
+# Execute main function
+main

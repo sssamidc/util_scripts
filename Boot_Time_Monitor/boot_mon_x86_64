@@ -1,0 +1,78 @@
+#!/bin/bash
+
+set -e 
+
+# Define file names
+#SYS_FILE="./system_analyze.txt"
+SYS_FILE="./system_analyze.csv"
+wait_for_boot() {
+    # Wait until the system is fully running
+    systemd-analyze > /dev/null
+    while [ $? -ne 0 ]; do
+		sleep 60
+		systemd-analyze > /dev/null
+    done
+
+    echo -e "+----------------------------+"
+    echo -e "|  SYSTEM IS UP & RUNNING    |"
+    echo -e "+----------------------------+"
+    
+}
+
+
+system_analyze() {
+    if [ -f "$SYS_FILE" ]; then
+        #(systemd-analyze | grep -oE '[0-9]+\.[0-9]+' | tr '\n' ' ';date) >> "$SYS_FILE"
+	{
+	    SYSTEM_DATA=$(systemd-analyze | grep -oE '[0-9]+\.[0-9]+')
+	    CURRENT_DATE=$(date)
+
+            printf "%s,%s,%s,%s,%s,%s,%s\n" $SYSTEM_DATA "$CURRENT_DATE" >> "$SYS_FILE"
+	   # printf "%-10s %-10s %-10s %-10s %-10s %-10s %s\n" $SYSTEM_DATA "$CURRENT_DATE"
+	} >> "$SYS_FILE"
+    else
+        printf "Firmware,Loader,Kernel,Userspace,Total,Graphics,Date\n" > "$SYS_FILE"
+	#printf "%-10s %-10s %-10s %-10s %-10s %-10s %-10s\n" "Firmware" "Loader" "Kernel" "Userspace" "Total" "Graphics" "Date" > "$SYS_FILE"
+	{
+	    SYSTEM_DATA=$(systemd-analyze | grep -oE '[0-9]+\.[0-9]+')
+	    CURRENT_DATE=$(date)
+
+            printf "%s,%s,%s,%s,%s,%s,%s\n" $SYSTEM_DATA "$CURRENT_DATE" >> "$SYS_FILE"
+	   # printf "%-10s %-10s %-10s %-10s %-10s %-10s %s\n" $SYSTEM_DATA "$CURRENT_DATE"
+	} >> "$SYS_FILE"
+    #	echo -e "Firmware\tLoader\tKernel\tUserspace\tTotal\tGraphics Date" > "$SYS_FILE"
+    #    (systemd-analyze | grep -oE '[0-9]+\.[0-9]+' | tr '\n' ' ';date) | column -t -s $'\t' >> "$SYS_FILE"
+    fi
+}
+
+reboot_seq() {
+ #   if [ -f "$FILE_NAME" ]; then
+       # num=$(<"$FILE_NAME")
+       	num=`wc -l $SYS_FILE | cut -d ' ' -f 1`
+        ((num++))
+
+        if [ $num -ne 3 ]; then
+            echo "Boot count reached 100, not rebooting."
+            return  # Exit the function without rebooting
+        else
+	    echo "Rebooting..."
+            # Uncomment the next line to actually reboot after a delay
+            # sleep 300 && reboot
+            # Uncomment the line below to reboot immediately
+            # reboot
+        fi
+
+    #else
+    #    echo 1 > "$FILE_NAME"  # Initialize boot count if file doesn't exist
+    #fi
+}
+
+# Main function to call other functions
+main() {
+    wait_for_boot
+    system_analyze  # Call system analyze function
+    reboot_seq      # Call reboot sequence function
+}
+
+# Execute main function
+main
