@@ -1,0 +1,100 @@
+#!/bin/bash
+
+set -e
+
+dmesg_log() {
+	sudo dmesg > dmesg_log
+	sudo dmesg -l err  > dmesg_err
+	sudo dmesg -l crit > dmesg_crit
+	sudo dmesg -l warn > dmesg_warn
+}
+
+
+loded_modules() {
+	sudo lsmod > present_modules
+}
+
+machine_info() {
+	PKG_INXI="inxi"
+	apt list --installed | grep $PKG_INXI > /dev/null
+	if [ $? -eq 0 ]; then
+		inxi -Fxxx > system_info
+	else
+		sudo apt install -y inxi > /dev/null
+		inxi -Fxxx > system_info
+	fi
+}
+
+sensor_info() {
+	sudo sensors > sensor_info
+}
+
+usb_info() {	
+	echo -e "***** USB info of the board *****" > usb_info
+	printf "\n\n----- USB List count -----\n" >> usb_info
+	sudo lsusb | wc -l >> usb_info
+	printf "\n\n----- USB List ----- \n" >> usb_info
+	sudo lsusb >> usb_info
+	printf "\n\n" >> usb_info
+	echo -e "----- Tree view of USB devices -----\n\n" >> usb_info
+	sudo lsusb -t >> usb_info
+	echo -e "\n\n----- Verbose of every USB dev -----\n\n" >> usb_info
+	sudo lsusb -v >> usb_info
+}
+
+system_analysis() {
+	systemd-analyze > system_analysis
+}
+
+sys_service_info() {
+	sudo systemctl list-units --type=service > services_info
+}
+
+pkg_info() {
+	dpkg -l > pkgs_info
+}
+
+jetson_info() {
+		jetson_release > jetson_info
+}
+
+syslog_info() {
+	sudo cat /var/log/syslog > syslog
+}
+
+full_log(){
+	FULL_LOG="full_sys_info_$(date +'%d-%m-%Y__%H-%M-%S').txt"
+	
+	cat << EOF > $FULL_LOG 
++------------------------------------------------------------------------------+
+|		COMPLETE SYSTEM INFORMATION RECORD			       |
++------------------------------------------------------------------------------+
+
+EOF
+	echo -e "HOSTNAME : $HOSTNAME" 		>> $FULL_LOG
+	echo -e "USERNAME : $USERNAME" 		>> $FULL_LOG
+	echo -e "SYSTEM   : $(uname -s)" 	>> $FULL_LOG
+	echo -e "ARCH     : $(uname -m)"	>> $FULL_LOG
+	echo -e "KERNEL   : $(uname -r)" 	>> $FULL_LOG
+	echo -e "DISTRO   : $(lsb_release -d)"  >> $FULL_LOG
+	echo -e "RELEASE  : $(lsb_release -r)"  >> $FULL_LOG
+	echo -e "CODENAME : $(lsb_release -c)"  >> $FULL_LOG
+
+	printf "\n" >> $FULL_LOG
+}
+
+main() {
+#	dmesg_log
+#	loded_modules
+#	machine_info
+#	sensor_info
+#	usb_info
+#	system_analysis
+#	sys_service_info
+#	pkg_info
+#	jetson_info
+#	syslog_info
+full_log;
+}
+
+main
