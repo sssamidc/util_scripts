@@ -1,0 +1,18 @@
+ath10k_hwmon-pci-90100
+Adapter: PCI adapter
+temp1:        +64.0°C  
+
+ina3221-i2c-1-40
+Adapter: c240000.i2c
+VDD_IN:                  4.98 V  
+VDD_CPU_GPU_CV:          4.98 V  
+VDD_SOC:                 4.98 V  
+in4:                     8.32 V  
+in5:                     2.44 V  
+in6:                     2.52 V  
+sum of shunt voltages:  12.76 V  
+curr1:                   1.66 A  (max =  +5.03 A, crit max =  +6.03 A)
+curr2:                 488.00 mA (max = +32.76 A, crit max = +32.76 A)
+curr3:                 504.00 mA (max = +32.76 A, crit max = +32.76 A)
+curr4:                   2.50 A  (crit max = +131.06 A)
+

@@ -1,0 +1,9 @@
+[    0.614721] tegra_dc_assign_hw_data: no matching compatible node
+[    0.620736] tegradccommon module_init failed
+[    0.625009] tegradc module_init failed
+[    5.028933] imx219 9-0010: imx219_board_setup: error during i2c read probe (-121)
+[    5.054840] imx219 9-0010: board setup failed
+[    5.058363] fusb301 1-0025: failed to read device id, err : 0xffffff87
+[    5.075966] fusb301 1-0025: fusb301 not support
+[    5.087771] imx219 10-0010: imx219_board_setup: error during i2c read probe (-121)
+[    5.101135] imx219 10-0010: board setup failed

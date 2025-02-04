@@ -1,0 +1,13 @@
++------------------------------------------------------------------------------+
+|		COMPLETE SYSTEM INFORMATION RECORD			       |
++------------------------------------------------------------------------------+
+
+HOSTNAME : nvidia-desktop
+USERNAME : 
+SYSTEM   : Linux
+ARCH     : aarch64
+KERNEL   : 5.10.120-tegra
+DISTRO   : Description:	Ubuntu 20.04.6 LTS
+RELEASE  : Release:	20.04
+CODENAME : Codename:	focal
+
