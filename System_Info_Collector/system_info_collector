@@ -84,17 +84,17 @@ EOF
 }
 
 main() {
-#	dmesg_log
-#	loded_modules
-#	machine_info
-#	sensor_info
-#	usb_info
-#	system_analysis
-#	sys_service_info
-#	pkg_info
-#	jetson_info
-#	syslog_info
-full_log;
+	dmesg_log
+	loded_modules
+	machine_info
+	sensor_info
+	usb_info
+	system_analysis
+	sys_service_info
+	pkg_info
+	jetson_info
+	syslog_info
+	full_log
 }
 
 main
