@@ -115,6 +115,12 @@ advantech() {
 			    inetutils-ping \
 			    nmap tzdata ufw
 	
+	sudo apt install cuda-minimal-build-11-4 \
+			 cuda-command-line-tools-11-4 \
+			 cuda-libraries-11-4 \
+			 libcudnn8 \
+			 libnvinfer8 libnvinfer-plugin8
+
 	wget https://github.com/mikefarah/yq/releases/download/v4.45.1/yq_linux_arm64.tar.gz -O - | tar xz && sudo mv yq_linux_arm64 /usr/bin/yq
 	rm install-man-page.sh yq.1
 
