@@ -88,7 +88,7 @@ advantech() {
 
 	sudo apt update -y && sudo apt autoremove -y
 	sudo rm -rf /var/chache/snapd
-	sudo apt autoremove --purge snapd -y
+	sudo apt purge snapd -y
 	sudo apt install -y alsa-utils \
 	       		    apt-transport-https \
 			    avahi-daemon \
@@ -157,6 +157,9 @@ advantech() {
 
 	sudo nvidia-ctk runtime configure --runtime=docker
 	sudo systemctl restart docker
+
+	sudo mkdir -p /opt/ati/{run,data,models,ref-data/map,uniflash,config,out}
+        sudo chown -R ati:ati /opt/ati
 
 	echo -e "\n${GR}-------------- SYSTEM SETUP COMPLETE --------------${CO}\n"
 }
