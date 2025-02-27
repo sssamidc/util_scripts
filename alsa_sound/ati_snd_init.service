@@ -1,0 +1,13 @@
+[Unit]
+Description=Initialise sound 
+After=alsa-restore.service
+Before=docker.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=true
+ExecStart=/etc/systemd/ati_snd_init.sh
+#Restart=always
+
+[Install]
+WantedBy=multi-user.target
