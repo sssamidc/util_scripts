@@ -33,7 +33,8 @@ dynalog() {
 			    wireless-tools \
 			    traceroute \
 			    inetutils-ping \
-			    nmap tzdata ufw
+			    nmap tzdata ufw \
+			    v4l2loopback-utils v4l2loopback-dkms
 
 	sudo apt install -y cuda-minimal-build-11-4 \
 			 cuda-command-line-tools-11-4 \
@@ -121,7 +122,8 @@ advantech() {
 			    wireless-tools \
 			    traceroute \
 			    inetutils-ping \
-			    nmap tzdata ufw
+			    nmap tzdata ufw \
+			    v4l2loopback-utils v4l2loopback-dkms
 	
 	sudo apt install cuda-minimal-build-11-4 \
 			 cuda-command-line-tools-11-4 \
