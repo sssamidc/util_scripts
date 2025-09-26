@@ -1,0 +1,15 @@
+[Unit]
+Description=Bluetooth Sound Alert Service
+After=bluetooth.service
+Wants=bluetooth.service
+
+[Service]
+Type=simple
+ExecStart=/etc/systemd/manualalert.sh
+StandardOutput=append:/opt/ati/ps4_manualalert.log
+StandardError=append:/opt/ati/ps4_manualalert.log
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target 
