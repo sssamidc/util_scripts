@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
 
 ## MAC Address pattern
-mac_pattern="60:5B:B4:"           ## For Sony Playstation 4 Controller
-## mac_pattern="8C:FD:15:"
+## mac_pattern="60:5B:B4:"           ## For Sony Playstation 4 Controller
 
 ## Boolean flag to track device connection state (false = not connected, true = connected)
 ps4_connected=false
@@ -66,13 +65,22 @@ main() {
                 # Device was not connected before, now it is - NEW CONNECTION!
                 echo "Found newly connected matching device: ${current_device}"
 
+	        echo "Stop sound container..."
+	        docker stop -t0 sound
+	        echo "Sound container stopped"
+
                 # Play the WAV file using aplay
                 aplay "/opt/ati/manual.wav" 2>/dev/null
+                # aplay -D hw:1,4 "/opt/ati/manual.wav" 2>/dev/null
                 if [ $? -eq 0 ]; then
                     echo "Audio played successfully for device ${current_device}"
                 else
                     echo "Failed to play audio for device ${current_device}"
                 fi
+
+	        echo "Start sound container..."
+	        docker start sound
+	        echo "Sound container started"
 
                 # Update state to connected
                 ps4_connected=true
@@ -85,7 +93,7 @@ main() {
         fi
 
         # Wait before next check
-        sleep 2
+        sleep 1
     done
 
     # Print horizontal line

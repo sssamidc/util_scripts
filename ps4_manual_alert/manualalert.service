@@ -5,6 +5,7 @@ Wants=bluetooth.service
 
 [Service]
 Type=simple
+ExecStartPre=/bin/sleep 10
 ExecStart=/etc/systemd/manualalert.sh
 StandardOutput=append:/opt/ati/ps4_manualalert.log
 StandardError=append:/opt/ati/ps4_manualalert.log

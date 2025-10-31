@@ -55,16 +55,6 @@ The system consists of two main components:
 
 ## Configuration
 
-### MAC Address Pattern
-
-To monitor a different Bluetooth device, modify the MAC address pattern in `manualalert.sh`:
-
-```bash
-mac_pattern="60:5B:B4:"           ## For Sony Playstation 4 Controller
-```
-
-Change this to match your target device's MAC address prefix.
-
 ### Audio File
 
 The system plays `/opt/ati/manual.wav` when a device connects. Ensure this file exists and is accessible.
