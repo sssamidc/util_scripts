@@ -27,6 +27,19 @@ The system consists of two main components:
 - `bluetoothctl` command available
 - `aplay` command for audio playback
 - Root/sudo access for installation
+- **Sound Card Configuration**: The script requires the correct ALSA sound card and device configuration. The script is currently configured to use `hw:1,4` (line 74 in `manualalert.sh`). You must update this to match your system's audio hardware before use.
+
+  To find your sound card and device numbers, run:
+  ```bash
+  aplay -l
+  ```
+  
+  Look for the card number and device number in the output, then update line 74 in the script:
+  ```bash
+  aplay -D hw:CARD,DEVICE "/opt/ati/manual.wav" 2>/dev/null
+  ```
+  
+  Replace `CARD` with your card number and `DEVICE` with your device number.
 
 ### Installation Steps
 
